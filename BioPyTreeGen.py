@@ -49,7 +49,12 @@ def tree_from_alignment(input_alignment_path, tree_format):
     output_tree_path = input_alignment_path.replace(input_alignment_extension,'')
     output_tree_path = f'{output_tree_path}_{tree_format}.tre'
     print(f'Saving: {output_tree_path}')
-    Phylo.write(output_tree, output_tree_path, 'newick')   
+    Phylo.write(output_tree, output_tree_path, 'newick')
+    # Generate and attach Branch Support to the Tree
+    supported_tree = get_branch_support(output_tree_path, 'newick')
+    output_supported_tree_path = f'{output_tree_path}_{tree_format}_supported.tre'
+    print(f'Saving: {output_supported_tree_path}')
+    Phylo.write(supported_tree, output_supported_tree_path, 'newick')    
 
 # Generate Bootstrap Trees
 def gen_boostrap_consensus_tree(input_alignment_path, replicate_count):
@@ -64,9 +69,14 @@ def gen_boostrap_consensus_tree(input_alignment_path, replicate_count):
     boostrap_constructor = DistanceTreeConstructor(distance_calculator)
     output_alignment_path = input_alignment_path.strip(input_alignment_extension)
     bootstrap_consensus_tree = bootstrap_consensus(working_alignment, replicate_count, boostrap_constructor, majority_consensus)
-    output_tree_path = f'{output_alignment_path}_boostrap.tre.tre'
+    output_tree_path = f'{output_alignment_path}_boostrap.tre'
     print(f'Saving: {output_tree_path}')
-    Phylo.write(bootstrap_consensus_tree, output_tree_path, 'newick')    
+    Phylo.write(bootstrap_consensus_tree, output_tree_path, 'newick')
+    # Generate and attach Branch Support to the Tree
+    supported_bootstrap_tree = get_branch_support(output_tree_path, 'newick')
+    output_supported_tree_path = f'{output_alignment_path}_boostrap_supported.tre'
+    print(f'Saving: {output_supported_tree_path}')
+    Phylo.write(supported_bootstrap_tree, output_supported_tree_path, 'newick')    
 
 ###############################################################################
 # TREE INPUT FUNCITONS
@@ -78,7 +88,6 @@ def get_branch_support(input_tree_path, input_tree_format):
     target_tree = trees[0]
     support_tree = get_support(target_tree, trees)
     return(support_tree)
-
 
 # ###############################################################################
 # # DEBUG WORKSPACE
