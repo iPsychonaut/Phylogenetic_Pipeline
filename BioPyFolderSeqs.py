@@ -2,14 +2,20 @@
 """
 Created on Thu Dec  1 11:53:14 2022
 
-@author: theda
-"""
-# Combined Fasta Files into a single file for alignment
+Combine Fasta Files into a single file for alignment
 
-# Import Necessary Libraries
+@author: ian.michael.bollinger@gmail.com
+"""
+###############################################################################
+# IMPORT LIBRARIES
+###############################################################################
 import os
 from Bio import SeqIO 
 
+###############################################################################
+# FASTA FILE FROM FOLDER OF FASTA FILES COMBINER
+###############################################################################
+# Function to combine a folder of fasta files into a single fasta file
 def combine_fastas(input_directory):
     # Iterate over files in given directory
     sequence_list = []
@@ -23,8 +29,8 @@ def combine_fastas(input_directory):
             with open(file_path) as handle:
                 for seq_record in SeqIO.FastaIO.FastaIterator(handle):        
                     temp_desc = seq_record.id
-                    temp_id = seq_record.description.replace(f'{temp_desc} ', '').split('voucher')[0:2]
-                    temp_id = f'{temp_id[0]}'
+                    #temp_id = seq_record.description.replace(f'{temp_desc} ', '').split('voucher')[0:2]
+                    temp_id = f'{temp_desc}'.replace('  ', ' ').replace(' ', '_')
                     seq_record.id = temp_id
                     seq_record.description = temp_desc
                     print(f'FINAL ID: {seq_record.id}')
@@ -35,5 +41,10 @@ def combine_fastas(input_directory):
     # Combine all of the individual sequences into a new file 
     combined_path = f"{input_directory}/combined.fasta"
     print(combined_path)
-    combined_seqs = SeqIO.write(import_list, combined_path, "fasta")
+    SeqIO.write(import_list, combined_path, "fasta")
     return(combined_path)
+
+###############################################################################
+# DEBUG WORKSPACE
+###############################################################################
+# combine_fastas('C:/Users/theda/.spyder-py3/BioPy/TEST IMPORT')
