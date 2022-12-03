@@ -1,14 +1,10 @@
 # Phylogenetic_Pipeline
-#####
-DESCRIPTION
-#####
+### PURPOSE
 
-Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then outputs four (4) pertinent trees: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
+Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then output four (4) pertinent trees: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
 
 
-#####
-REQUIREMENTS
-#####
+### REQUIREMENTS
 
 MUSCLE for alingment
 1) Download it at: https://2018-03-06-ibioic.readthedocs.io/en/latest/install_muscle.html
@@ -23,9 +19,7 @@ IQ-Tree for Tree Building
 2) Update line 16 in BioPyTreeGen with the path of the IQ-Tree executable
 
 
-#####
-FILE DESCRIPTIONS
-#####
+### FILE DESCRIPTIONS
 
 -BioPyFolderSeqs contains the function combine_fastas(input_directory) which will combine all Fasta files in a given directory into a single fasta for alignment
 
@@ -42,9 +36,7 @@ gen_boostrap_consensus_tree(input_alignment_path, replicate_count) which will ge
 run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator
 
 
-#####
-OUTPUT FILES
-#####
+### OUTPUT FILES
 
 The outputs from this will either go into the provided Fasta Folder or a new one based on search criteria will be generated.
 The following files will be present:
@@ -64,8 +56,6 @@ The following files will be present:
 -An IQ-Tree Series of Files
 
 
-#####
-UPCOMING UPDATES
-#####
+### UPCOMING UPDATES
 
 Simple GUI for ease of user input, general data viewing, and aesthetics
