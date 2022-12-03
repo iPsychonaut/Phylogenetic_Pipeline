@@ -2,21 +2,20 @@
 """
 Created on Wed Nov 30 11:44:25 2022
 
-@author: theda
+Download Sequences from NCBI and combine into a single file for alingment
+
+@author: ian.michael.bollinger@gmail.com
 """
-
-# Download Sequences from NCBI and combine into a single file for alingment
-
+###############################################################################
+# IMPORT LIBRARIES
+###############################################################################
 from Bio import Entrez
 from Bio import SeqIO
 
-# What Databases can Entrez view?
-# handle = Entrez.einfo()
-# rec = Entrez.read(handle)
-# handle.close()
-# print(rec.keys())
-# rec['DbList']
-
+###############################################################################
+# 
+###############################################################################
+# Function to search NCBI for a given Gene and Organism and return the maximum number of records
 def search_ncbi(user_email, search_term, return_number, search_db, save_path):
     # Set user Email for Entrez
     Entrez.email = user_email
@@ -27,8 +26,7 @@ def search_ncbi(user_email, search_term, return_number, search_db, save_path):
     handle.close()
     #print(rec_list['Count']) # Print the Number of total items returned
     #print(len(rec_list['IdList'])) # Print the Number Returned by Search
-    #print(rec_list['IdList']) # Print the Id's of each item in the Returned Search
-    
+    #print(rec_list['IdList']) # Print the Id's of each item in the Returned Search  
     id_list = rec_list['IdList']
     handle = Entrez.efetch(db = search_db, id=id_list, rettype='gb') # Returns as Genbank Format that we need to parse with SeqIO
     recs = list(SeqIO.parse(handle, 'gb'))
@@ -40,19 +38,32 @@ def search_ncbi(user_email, search_term, return_number, search_db, save_path):
         faa_filename = f'{save_path}/{seq_record.id}.fasta'
         import_list.append(seq_record)
         with open(faa_filename, 'w') as output_handle:
-            output_handle.write(f"{seq_record.id} {seq_record.description}\n{seq_record.seq}\n")
-            sequence_list.append(seq_record.id)
-            description_list.append(seq_record.description)
-            sequence_list.append(seq_record.seq)        
+            try:
+                output_handle.write(f"{seq_record.id} {seq_record.description}\n{seq_record.seq}\n")
+                sequence_list.append(seq_record.id)
+                description_list.append(seq_record.description)
+                sequence_list.append(seq_record.seq)        
+            except:
+                print(f'PASS DUE TO UNDEFINED SEQUENCE ERROR: {faa_filename}')
+    print(import_list)
     handle.close()
     
         
     # Combine all of the individual sequences into a new file 
     combined_path = f"{save_path}/combined.fasta"
     print(combined_path)
-    combined_seqs = SeqIO.write(import_list, combined_path, "fasta")
-    
+    SeqIO.write(import_list, combined_path, "fasta")
     return(combined_path)
+
+###############################################################################
+# DEBUG WORKSPACE
+###############################################################################
+# What Databases can Entrez view?
+# handle = Entrez.einfo()
+# rec = Entrez.read(handle)
+# handle.close()
+# print(rec.keys())
+# rec['DbList']
 
 # # Set user Email for Entrez
 # user_email = 'ian.michael.bollinger@gmail.com'
