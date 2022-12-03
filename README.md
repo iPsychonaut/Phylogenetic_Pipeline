@@ -3,12 +3,7 @@
 DESCRIPTION
 #####
 
-This pipeline is designed with two (2) different input pathways:
-1) A folder already containing Fasta files
-OR
-2) An NCBI Search criteria, currently formatted as "{Gene name}[All Fields] AND {Species name}[Organism]"
-
-These will generate a series of files needed to develop numerous Phylogenetic Trees with pertinent statistics for analysis & publication
+Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then outputs four (4) pertinent trees from: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
 
 
 #####
