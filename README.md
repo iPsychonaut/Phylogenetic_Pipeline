@@ -3,7 +3,7 @@
 DESCRIPTION
 #####
 
-Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then outputs four (4) pertinent trees from: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
+Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then outputs four (4) pertinent trees: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
 
 
 #####
