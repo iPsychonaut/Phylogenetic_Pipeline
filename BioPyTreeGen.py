@@ -27,6 +27,12 @@ distance_calculator = DistanceCalculator('identity')
 def run_iqtree(input_alignment_path, save_path):
     # Generate IqTree2 Files
     os.system(f'{iqtree_path} -s "{input_alignment_path}" -nt AUTO')
+    # Generate and attach Branch Support to the Tree
+    output_tree_path = f'{input_alignment_path}.treefile'
+    supported_tree = get_branch_support(output_tree_path, 'newick')
+    output_supported_tree_path = f'{output_tree_path}_supported.tre'
+    print(f'Saving: {output_supported_tree_path}')
+    Phylo.write(supported_tree, output_supported_tree_path, 'newick')    
 
 # Function to generate a Neighbor Joining or UPGMA tree from an input alignment
 def tree_from_alignment(input_alignment_path, tree_format):
