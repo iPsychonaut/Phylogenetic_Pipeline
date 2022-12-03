@@ -47,13 +47,13 @@ The following files will be present:
 
 -MUSCLE Alignment of the Combined FASTA
 
--A Neighbor Joining Tree File
+-A Neighbor Joining Tree File with Branch Support
 
--A UPGMA Tree File
+-A UPGMA Tree File with Branch Support
 
--A Bootstrap Consensus Tree File
+-A Bootstrap Consensus Tree File with Branch Support
 
--An IQ-Tree Series of Files
+-An IQ-Tree Series of Files, indlucing a tree with Branch Support
 
 
 ### UPCOMING UPDATES
