@@ -1,8 +1,16 @@
-# Phylogenetic_Pipeline_
+# Phylogenetic_Pipeline
 
 REQUIRES MUSCLE FOR ALIGNMENT
 1) Download it at: https://2018-03-06-ibioic.readthedocs.io/en/latest/install_muscle.html
-2) Replace the 'muscle5.1.win64.exe' file with the downloaded version's executable
+2) Update line 14 in BioPySeqAlign with the path of the MUSCLE executable
+
+REQUIRES TRIMAI FOR ALIGNMENT
+1) Download the command line version it at: http://trimal.cgenomics.org/getting_started_with_trimal_v1.2
+2) Update line 16 in BioPySeqAlign with the path of the TrimAI executable
+
+REQUIRES IQ-TREE FOR TREE BUILDING
+1) Download the command line version it at: http://www.iqtree.org/
+2) Update line 16 in BioPyTreeGen with the path of the IQ-Tree executable
 
 This pipeline is designed with two (2) different input pathways:
 1) A folder already containing Fasta files
@@ -16,12 +24,24 @@ What Each File Does:
 
 -BioPyNCBISeqs contains the function search_ncbi(user_email, search_term, return_number, search_db, save_path) which will search NCBI for, download, and combine a desired number of Fasta files for alignment
 
--BioPySeqMUSCLE contains the function MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and output a MUSCLE alignment
+-BioPySeqAlign contains the functions:
 
--BioPyTreeFigures contains the function trees_from_alignment(input_alignment, save_path) which will take an alignment and generate a Phyloxml Tree, Nexus Tree, and IQ-Tree2 series
+MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and output a MUSCLE alignment
+
+trimAI_alignment(input_alignment) to call the AI trimmer
+
+fasta_to_relaxed_phylip(input_alignment)/fasta_to_strict_phylip(input_alignment) for final Phylip output
 
 
-The output of this will either go into the provided Fasta Folder or a new one based on search criteria will be generated.
+-BioPyTreeGen contains the functions:
+
+tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Phyloxml Tree, Nexus Tree, and IQ-Tree2 series
+
+gen_boostrap_consensus_tree(input_alignment_path, replicate_count) which will generate a consensus bootstrap tree based on a set number of replicates
+
+run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator
+
+The outputs from this will either go into the provided Fasta Folder or a new one based on search criteria will be generated.
 The following files will be present:
 
 -ALL Relevent FASTAS Files (if downloaded)
@@ -30,13 +50,13 @@ The following files will be present:
 
 -MUSCLE Alignment of the Combined FASTA
 
--A Phyloxml Tree File
+-A Neighbor Joining Tree File
 
--A Nexus Tree File
+-A UPGMA Tree File
 
--An SVG of the Nexus Tree
+-A Bootstrap Consensus Tree File
 
--An IQ-Tree2 Series of Files
+-An IQ-Tree Series of Files
 
 
 UPCOMING UPDATES:
