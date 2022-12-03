@@ -27,8 +27,6 @@ IQ-Tree for Tree Building
 FILE DESCRIPTIONS
 #####
 
-What Each File Does:
-
 -BioPyFolderSeqs contains the function combine_fastas(input_directory) which will combine all Fasta files in a given directory into a single fasta for alignment
 
 -BioPyNCBISeqs contains the function search_ncbi(user_email, search_term, return_number, search_db, save_path) which will search NCBI for, download, and combine a desired number of Fasta files for alignment
