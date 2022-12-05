@@ -13,20 +13,22 @@ from Bio import Entrez
 from Bio import SeqIO
 
 ###############################################################################
-# 
+# NCBI SEARCH
 ###############################################################################
 # Function to search NCBI for a given Gene and Organism and return the maximum number of records
 def search_ncbi(user_email, search_term, return_number, search_db, save_path):
+    
     # Set user Email for Entrez
     Entrez.email = user_email
+    
     # Search a Database (db) for a specific term
     print(search_db)
     handle = Entrez.esearch(db = search_db, term = search_term, retmax = return_number)
     rec_list = Entrez.read(handle)
     handle.close()
-    #print(rec_list['Count']) # Print the Number of total items returned
-    #print(len(rec_list['IdList'])) # Print the Number Returned by Search
-    #print(rec_list['IdList']) # Print the Id's of each item in the Returned Search  
+    print(rec_list['Count']) # Print the Number of total items returned
+    print(len(rec_list['IdList'])) # Print the Number Returned by Search
+    print(rec_list['IdList']) # Print the Id's of each item in the Returned Search  
     id_list = rec_list['IdList']
     handle = Entrez.efetch(db = search_db, id=id_list, rettype='gb') # Returns as Genbank Format that we need to parse with SeqIO
     recs = list(SeqIO.parse(handle, 'gb'))
@@ -46,8 +48,7 @@ def search_ncbi(user_email, search_term, return_number, search_db, save_path):
             except:
                 print(f'PASS DUE TO UNDEFINED SEQUENCE ERROR: {faa_filename}')
     print(import_list)
-    handle.close()
-    
+    handle.close()    
         
     # Combine all of the individual sequences into a new file 
     combined_path = f"{save_path}/combined.fasta"
@@ -68,7 +69,10 @@ def search_ncbi(user_email, search_term, return_number, search_db, save_path):
 # # Set user Email for Entrez
 # user_email = 'ian.michael.bollinger@gmail.com'
 # # Set search term
-# search_term = 'CRT[Gene Name] AND "Plasmodium falciparum"[Organism]'
+# search_term = 'Internal Transcribed Spcaer [All Fields] AND "Psilocybe"[Organism] NOT "whole genome shotgun"'
+# return_count = 10
+# search_db = 'nucleotide'
+# save_path = './NEW'
 
-# returned_seqs = search_ncbi(user_email, search_term)
+# returned_seqs = search_ncbi(user_email, search_term, return_count, search_db, save_path)
 # print(returned_seqs)
