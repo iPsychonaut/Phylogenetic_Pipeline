@@ -20,7 +20,7 @@ IQ-Tree for Tree Building
 
 ### GUI DESCRIPTION
 
-This will load a window where you can toggle between the three (3) search options:
+This will load a window where you can toggle between the three (3) options:
 1) Compile as Folder with ONLY FASTA files in it
 2) Search NCBI for a GENE AND ORGANISM and RETURN MAX RECORDS for compilation
 3) *Load an already generated alignment for tree generation*
