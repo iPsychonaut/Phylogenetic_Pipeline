@@ -18,6 +18,13 @@ IQ-Tree for Tree Building
 1) Download the command line version it at: http://www.iqtree.org/
 2) Update line 16 in BioPyTreeGen with the path of the IQ-Tree executable
 
+### GUI DESCRIPTION
+
+This will load a window where you can toggle between the three (3) search options:
+1) Compile as Folder with ONLY FASTA files in it
+2) Search NCBI for a GENE AND ORGANISM and RETURN MAX RECORDS for compilation
+*3) Load an already generated alignment for tree generation
+*NOT IMPLEMENTED YET
 
 ### FILE DESCRIPTIONS
 
@@ -27,8 +34,7 @@ IQ-Tree for Tree Building
 
 -BioPySeqAlign contains the functions:
 MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and output a MUSCLE alignment;
-trimAI_alignment(input_alignment) to call the AI trimmer;
-fasta_to_relaxed_phylip(input_alignment)/fasta_to_strict_phylip(input_alignment) for final Phylip output
+trimAI_alignment(input_alignment) to call the AI trimmer
 
 -BioPyTreeGen contains the functions:
 tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Phyloxml Tree, Nexus Tree, and IQ-Tree2 series;
@@ -45,11 +51,9 @@ The following files will be present:
 
 -Combined FASTA File
 
--MUSCLE Alignment of the Combined FASTA
+-MUSCLE Alignment FASTA of the Combined Sequences
 
 -A Neighbor Joining Tree File with Branch Support
-
--A UPGMA Tree File with Branch Support
 
 -A Bootstrap Consensus Tree File with Branch Support
 
@@ -58,4 +62,4 @@ The following files will be present:
 
 ### UPCOMING UPDATES
 
-Simple GUI for ease of user input, general data viewing, and aesthetics
+Load an already generated alignment for tree generation
