@@ -76,13 +76,18 @@ def run_search_pipeline():
     
     now = datetime.now() # datetime object containing current date and time
     dt_string = now.strftime("%Y%m%d_%H%M")
-    save_path = f'{search_gene.replace("*","(WC)")}_{search_organism.replace("*","(WC)")}_{return_count}_{dt_string}'
+    save_path = f'{search_gene.replace("*","(WC)").replace(" ","_")}_{search_organism.replace("*","(WC)").replace(" ","_")}_{return_count}_{dt_string}'
     
     if ' ' in search_gene:
         search_gene = f'"{search_gene}"'
+        gene_field_switch = 'All Fields'
+    else:
+        gene_field_switch = 'Gene Name'
     if ' ' in search_organism:
         search_gene = f'"{search_organism}"'
-    search_term = f'{search_gene}[Gene Name] AND {search_organism}[Organism] AND ({search_minbp}[SLEN] : {search_maxbp}[SLEN]) NOT "whole genome shotgun"[All Fields]'
+    search_term = f"""
+{search_gene}[{gene_field_switch}] AND {search_organism}[Organism] AND ({search_minbp}[SLEN] : {search_maxbp}[SLEN]) NOT "whole genome shotgun"[All Fields]
+"""
     search_db = 'nucleotide'
     
     if search_email == '':
@@ -93,13 +98,13 @@ def run_search_pipeline():
         search_entry_display.config(text='Please enter a Gene AND/OR an Organism')
     else:
         msg = f"""
-              EMAIL: {search_email}\nGENE: {search_gene}
-              ORGNAISM: {search_organism}
-              Saving up to {return_count}
-              NCBI records (between {search_minbp}-{search_maxbp}bp),
-              alignments, and trees to
-              {save_path}
-              """
+EMAIL: {search_email}\nGENE: {search_gene}
+ORGNAISM: {search_organism}
+Saving up to {return_count}
+NCBI records (between {search_minbp}-{search_maxbp}bp),
+alignments, and trees to
+{save_path}
+"""
         # Check whether the specified path exists or not
         isExist = os.path.exists(save_path)
         if not isExist:
@@ -131,11 +136,11 @@ def run_alignment_pipeline():
     file_name = combined_path.split('/')[-1]
     save_path = combined_path.strip(file_name)
     msg = f"""
-          Alignments and/or trees were generated from
-          {combined_path}
-          and saved to
-          {save_path}
-          """    
+Alignments and/or trees were generated from
+{combined_path}
+and saved to
+{save_path}
+"""    
     run_main_pipeline(combined_path, msg)
 
 # Function to run the Tree Generators on a trimmed alignment
@@ -225,7 +230,8 @@ def search_ncbi(user_email, search_term, return_number, search_db, save_path):
     print(len(rec_list['IdList'])) # Print the Number Returned by Search
     print(rec_list['IdList']) # Print the Id's of each item in the Returned Search  
     id_list = rec_list['IdList']
-    handle = Entrez.efetch(db = search_db, id=id_list, rettype='gb') # Returns as Genbank Format that we need to parse with SeqIO
+    # Returns as Genbank Format that we need to parse with SeqIO
+    handle = Entrez.efetch(db = search_db, id=id_list, rettype='gb') 
     recs = list(SeqIO.parse(handle, 'gb'))
     sequence_list = []
     description_list = []
@@ -331,7 +337,8 @@ def gen_boostrap_consensus_tree(input_alignment_path, save_path, replicate_count
     global distance_calculator
     boostrap_constructor = DistanceTreeConstructor(distance_calculator)
     output_tree_path = input_alignment_path.replace('.fasta','_bootstrap.tre')
-    bootstrap_consensus_tree = bootstrap_consensus(working_alignment, replicate_count, boostrap_constructor, majority_consensus)
+    bootstrap_consensus_tree = bootstrap_consensus(working_alignment, replicate_count,
+                                                   boostrap_constructor, majority_consensus)
     print(f'Saving: {output_tree_path}')
     Phylo.write(bootstrap_consensus_tree, output_tree_path, 'newick')
     
