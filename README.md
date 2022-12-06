@@ -63,3 +63,5 @@ The following files will be present:
 ### UPCOMING UPDATES
 
 Load an already generated alignment for tree generation
+
+Accept Wildcards into NCBI Search Parameters
