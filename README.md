@@ -1,7 +1,7 @@
 # Phylogenetic_Pipeline
 ### PURPOSE
 
-Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then output four (4) pertinent trees: Neighbor Joining, Consensus Bootstrap, and the IQ-Tree output.
+Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then output three (3) statistically supported trees: Neighbor Joining, Consensus Bootstrap, and the IQ-Tree output.
 
 
 ### REQUIREMENTS
