@@ -79,7 +79,7 @@ def run_search_pipeline():
     elif search_gene == '' and search_organism == '':
         search_entry_display.config(text='Please enter a Gene AND/OR an Organism')
     else:
-        msg = """
+        msg = f"""
               EMAIL: {search_email}\nGENE: {search_gene}
               ORGNAISM: {search_organism}
               Saving up to {return_count}
