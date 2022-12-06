@@ -24,6 +24,8 @@ iqtree_path  = 'E:/iqtree-1.6.12-Windows/iqtree-1.6.12-Windows/bin/iqtree.exe'
 mrbayes_path  = 'C:/Users/theda/.spyder-py3/BioPy/mb.3.2.7-win64.exe'
 muscle_exe = r"C:/Users/theda/.spyder-py3/BioPy/muscle5.1.win64.exe"
 trimAI_exe = r"C:/Users/theda/.spyder-py3/BioPy/trimal.exe"
+
+# Set Distance Calcutlator to 'identity' for Nucleotide Processing
 distance_calculator = DistanceCalculator('identity')
 
 ###############################################################################
