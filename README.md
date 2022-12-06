@@ -1,7 +1,7 @@
 # Phylogenetic_Pipeline
 ### PURPOSE
 
-Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then output four (4) pertinent trees: Neighbor Joining, UPGMA, Consensus Bootstrap, and the IQ-Tree output.
+Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Search Criteria and then output four (4) pertinent trees: Neighbor Joining, Consensus Bootstrap, and the IQ-Tree output.
 
 
 ### REQUIREMENTS
@@ -37,9 +37,9 @@ MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and 
 trimAI_alignment(input_alignment) to call the AI trimmer
 
 -BioPyTreeGen contains the functions:
-tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Phyloxml Tree, Nexus Tree, and IQ-Tree2 series;
-gen_boostrap_consensus_tree(input_alignment_path, replicate_count) which will generate a consensus bootstrap tree based on a set number of replicates;
-run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator
+tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Neighbor Joining Tree with Branch Support;
+gen_boostrap_consensus_tree(input_alignment_path, replicate_count) which will generate a consensus Bootstrap Tree based on a set number of replicates with Branch Support;
+run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator and Support the final Tree's Branches
 
 
 ### OUTPUT FILES
