@@ -6,17 +6,17 @@ Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Se
 
 ### REQUIREMENTS
 
+IQ-Tree for Tree Building
+1) Download the command line version it at: http://www.iqtree.org/
+2) Update line 16 in BioPyTreeGen (or line 23 in PhyloPipelineGUI.py)  with the path of the IQ-Tree executable
+
 MUSCLE for alingment
 1) Download it at: https://2018-03-06-ibioic.readthedocs.io/en/latest/install_muscle.html
-2) Update line 14 in BioPySeqAlign with the path of the MUSCLE executable
+2) Update line 14 in BioPySeqAlign (or line 25 in PhyloPipelineGUI.py) with the path of the MUSCLE executable
 
 TrimAI for alignment
 1) Download the command line version it at: http://trimal.cgenomics.org/getting_started_with_trimal_v1.2
-2) Update line 16 in BioPySeqAlign with the path of the TrimAI executable
-
-IQ-Tree for Tree Building
-1) Download the command line version it at: http://www.iqtree.org/
-2) Update line 16 in BioPyTreeGen with the path of the IQ-Tree executable
+2) Update line 16 in BioPySeqAlign (or line 26 in PhyloPipelineGUI.py)  with the path of the TrimAI executable
 
 ### GUI DESCRIPTION
 
