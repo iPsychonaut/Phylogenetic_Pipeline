@@ -21,16 +21,20 @@ from datetime import datetime
 
 # Set Executable paths 
 iqtree_path  = 'E:/iqtree-1.6.12-Windows/iqtree-1.6.12-Windows/bin/iqtree.exe'
-mrbayes_path  = 'C:/Users/theda/.spyder-py3/BioPy/mb.3.2.7-win64.exe'
 muscle_exe = r"C:/Users/theda/.spyder-py3/BioPy/muscle5.1.win64.exe"
 trimAI_exe = r"C:/Users/theda/.spyder-py3/BioPy/trimal.exe"
 
-# Set Distance Calcutlator to 'identity' for Nucleotide Processing
+# Set Distance Calculator to 'identity' for Neucleotide Processing
 distance_calculator = DistanceCalculator('identity')
 
 ###############################################################################
 # GUI Functions Workspace
 ###############################################################################
+
+def display_update(msg):
+    search_entry_display.config(text=msg)
+    folder_entry_display.config(text=msg)
+    alignment_entry_display.config(text=msg)  
 
 # Function to have user to select a directory and store it in global var called folder_path
 def update_folder_param():
@@ -40,12 +44,13 @@ def update_folder_param():
     folder_path.set(filename)
     save_path = folder_path.get() # NEEDS UPDATE
     msg = f'Saving alignments and trees to\n{save_path}'
-    folder_entry_display.config(text=msg)
+    display_update(msg)
     return(save_path, msg)
 
 # Function to run the Folder Compiler Pipeline
 def run_folder_pipeline():
     global save_path
+    display_update('Processing...\nLarger Data Sets take longer')
     save_path, msg = update_folder_param()
     
     # Generate Combined Sequence List
@@ -59,7 +64,9 @@ def run_search_pipeline():
     global search_gene
     global search_organism
     global return_count
-
+    
+    display_update('Processing...\nLarger Data Sets take longer')
+    
     search_email = email_entry.get()
     search_gene = gene_entry.get()
     search_organism = organism_entry.get()
@@ -69,9 +76,13 @@ def run_search_pipeline():
     
     now = datetime.now() # datetime object containing current date and time
     dt_string = now.strftime("%Y%m%d_%H%M")
-    save_path = f'{search_gene}_{search_organism}_{return_count}_{dt_string}'
+    save_path = f'{search_gene.replace("*","(wildcard)")}_{search_organism.replace("*","(wildcard)")}_{return_count}_{dt_string}'
     
-    search_term = f'"{search_gene}"[All Fields] AND "{search_organism}"[Organism] AND ("{search_minbp}"[SLEN] : "{search_maxbp}"[SLEN]) NOT "whole genome shotgun"[All Fields]'
+    if ' ' in search_gene:
+        search_gene = f'"{search_gene}"'
+    if ' ' in search_organism:
+        search_gene = f'"{search_organism}"'
+    search_term = f'{search_gene}[Gene Name] AND {search_organism}[Organism] AND ({search_minbp}[SLEN] : {search_maxbp}[SLEN]) NOT "whole genome shotgun"[All Fields]'
     search_db = 'nucleotide'
     
     if search_email == '':
@@ -102,35 +113,68 @@ def run_search_pipeline():
         print(len(combined_path))
         if combined_path[0] == '':
             msg = f'No sequences were found in {combined_path}\nRetry search with new parameters'
-            search_entry_display.config(text=msg)
+            display_update(msg)
         else:
             run_main_pipeline(combined_path, msg)           
 
-# Function to take the funneled combined fastas and run then through main pipeline
-def run_main_pipeline(combined_path, msg):
+# Function to run the Alignment Pipeline on a trimmed sequence
+def run_alignment_pipeline():
+    global save_path
+    display_update('Processing...\nLarger Data Sets take longer')
+    file_types = (('FASTA files', '*.fasta'),
+                 ('Phylip files', '*.phylip'),
+                 ('All files', '*.*'))
+    combined_path = filedialog.askopenfilename(
+                 title='Please load a Multiple Sequence Alignment OR Sequence List',
+                 initialdir='./',
+                 filetypes=file_types)
+    file_name = combined_path.split('/')[-1]
+    save_path = combined_path.strip(file_name)
+    msg = f"""
+          Alignments and/or trees were generated from
+          {combined_path}
+          and saved to
+          {save_path}
+          """    
+    run_main_pipeline(combined_path, msg)
 
-    # Convert Compile Sequence List into MUSCLE Alignment (output fasta)
-    MUSCLE_aln_path = MUSCLE_alignment(combined_path, save_path)
-
-    # Trim the MUSCLE Alignment # and convert to Phylip (relaxed or strict)
-    trimmed_aln_path = trimAI_alignment(MUSCLE_aln_path)    
-
+# Function to run the Tree Generators on a trimmed alignment
+def run_tree_generators(trimmed_aln_path, save_path, msg):
+    display_update(msg)
     # Creating Tree Files and Figures based on MUSCLE Alignment
     gen_nj_tree(trimmed_aln_path)
     gen_boostrap_consensus_tree(trimmed_aln_path, save_path, 200)
     run_iqtree(trimmed_aln_path, save_path)
-    search_entry_display.config(text=msg)
 
+# Function to take the funneled combined fastas and run then through main pipeline
+def run_main_pipeline(combined_path, msg):
+    # Convert Compile Sequence List into MUSCLE Alignment (output fasta)
+    MUSCLE_aln_path = MUSCLE_alignment(combined_path, save_path)
+
+    # Trim the MUSCLE Alignment # and convert to Phylip (relaxed or strict)
+    trimmed_aln_path = trimAI_alignment(MUSCLE_aln_path)
+    
+    # Run Tree Generators
+    run_tree_generators(trimmed_aln_path, save_path, msg)
+    
 # Function to swap from the search frame to the folder frame.
 def change_to_folder():
     search_frame.forget()
+    alignment_frame.forget()
     folder_frame.pack(fill='both', expand=1)
 
 # Function to swap from the folder frame to the search frame
 def change_to_search():
-    search_frame.pack(fill='both', expand=1)
     folder_frame.forget()
+    alignment_frame.forget()
+    search_frame.pack(fill='both', expand=1)
 
+# Function to swap from the folder frame to the search frame
+def change_to_alignment():
+    folder_frame.forget()
+    search_frame.forget()
+    alignment_frame.pack(fill='both', expand=1)
+    
 ###############################################################################
 # COMPILER FUNCTIONS
 ###############################################################################
@@ -321,30 +365,57 @@ if __name__ == '__main__':
     return_count = IntVar()
     folder_path = StringVar()
     save_path = StringVar()
-    
-    # Generate the two Main Frames
-    message_frame = tk.Frame(root)
-    entry_frame = tk.Frame(root)
-    
+
     # Generate Main root Window and load Frames
-    width, height = 500, 400
+    width, height = 1000, 500
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     search_frame = tk.Frame(root)
     folder_frame = tk.Frame(root)
+    alignment_frame = tk.Frame(root)
+    img_logo = ImageTk.PhotoImage(Image.open("C:/Users/theda/.spyder-py3/BioPy/CC_banner.png"))
     
     # Let's create the fonts that we need.
     font_large = font.Font(family = 'Avenir', size = '12', weight = 'bold')
     font_small = font.Font(family = 'Avenir', size = '12')
     font_button = font.Font(family = 'Avenir', size = '16', weight = 'bold')
     
+    # Build out Folder Frame
+    folder_frame_logo = tk.Label(folder_frame, image=img_logo).pack(pady = 5)
+    folder_frame_heading = tk.Label(folder_frame, text='FOLDER COMPILER',
+                                font=font_large).pack(pady = 5)    
+    change_to_search_button = tk.Button(folder_frame, font=font_small,
+                                   text='Change to NCBI Search Compiler',
+                                   command=change_to_search).pack(pady = 5)
+    change_to_alignment_button = tk.Button(folder_frame,
+                                    text='Change to Sequence/MSA->Tree Builder',
+                                    font = font_small,
+                                    command = change_to_alignment).pack(pady = 5)
+    folder_label = tk.Label(folder_frame,
+                           text='You were prompted to select a folder containing\nONLY Fasta files for alignment',
+                           font=font_small).pack(pady = 5)
+    
+    folder_entry_display = tk.Label(folder_frame,
+                           text='No search submitted yet',
+                           font=font_large,
+                           bg='brown', fg='lightyellow')
+    folder_entry_display.pack(pady = 5)
+    
+    folder_pipeline_button = tk.Button(folder_frame,
+                             text='SELECT FOLDER & RUN PIPELINE',
+                             fg='darkred', bg='darkgray', font = font_button,
+                             command= run_folder_pipeline).pack(pady = 5)
+    
     # Build out Search Frame
-    img_logo = ImageTk.PhotoImage(Image.open("C:/Users/theda/.spyder-py3/BioPy/CC_banner.png"))
     search_frame_logo = tk.Label(search_frame, image = img_logo).pack(pady = 0)    
     change_to_folder_button = tk.Button(search_frame, text='Change to Folder Compiler',
                                    font = font_small, command = change_to_folder).pack(pady = 5)
     search_heading_label = tk.Label(search_frame, text = 'NCBI SEARCH COMPILER',
-                                    font = font_large).pack(pady = 20)    
+                                    font = font_large).pack(pady = 20)
+    change_to_alignment_button = tk.Button(search_frame,
+                                    text='Change to Sequence/MSA->Tree Builder',
+                                    font = font_small,
+                                    command = change_to_alignment).pack(pady = 5)
     email_label = tk.Label(search_frame,
                            text='Enter an email associated with an NCBI login\nEX: ian.michael.bollinger@gmail.com',
                            font=font_small).pack(pady=5)
@@ -375,27 +446,24 @@ if __name__ == '__main__':
                              fg='darkred', bg='darkgray', font = font_button,
                              command=run_search_pipeline).pack(pady = 5)
     
-    # Build out Folder Frame
-    folder_frame_logo = tk.Label(folder_frame, image=img_logo).pack(pady = 5)
-    folder_frame_heading = tk.Label(folder_frame, text='FOLDER COMPILER',
-                                font=font_large).pack(pady = 5)    
-    change_to_search_button = tk.Button(folder_frame, font=font_small,
+    # Build out Alignment Frame
+    search_frame_logo = tk.Label(alignment_frame, image = img_logo).pack(pady = 0)    
+    change_to_folder_button = tk.Button(alignment_frame, text='Change to Folder Compiler',
+                                   font = font_small, command = change_to_folder).pack(pady = 5)
+    change_to_search_button = tk.Button(alignment_frame, font=font_small,
                                    text='Change to NCBI Search Compiler',
                                    command=change_to_search).pack(pady = 5)
-    folder_label = tk.Label(folder_frame,
-                           text='You will be prompted to select a folder containing\nONLY Fasta files for alignment',
-                           font=font_small).pack(pady = 5)
-    
-    folder_entry_display = tk.Label(folder_frame,
-                           text='No search submitted yet',
+    alignment_heading_label = tk.Label(alignment_frame, text = 'SEQUENCE/MSA->TREE BUILDER',
+                                    font = font_large).pack(pady = 20)    
+    alignment_entry_display = tk.Label(alignment_frame,
+                           text='No sequences submitted yet',
                            font=font_large,
                            bg='brown', fg='lightyellow')
-    folder_entry_display.pack(pady = 5)
-    
-    folder_pipeline_button = tk.Button(folder_frame,
-                             text='SELECT FOLDER & RUN PIPELINE',
+    alignment_entry_display.pack(pady=5)
+    alignment_pipeline_button = tk.Button(alignment_frame,
+                             text='SELECT SEQUENCES & RUN PIPELINE',
                              fg='darkred', bg='darkgray', font = font_button,
-                             command= run_folder_pipeline).pack(pady = 5)
+                             command=run_alignment_pipeline).pack(pady = 5)
     
     # Build the Folder Frame out and run it and Main Loop
     folder_frame.pack(fill='both', expand=1)
