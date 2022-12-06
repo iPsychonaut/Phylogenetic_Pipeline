@@ -12,19 +12,18 @@ IQ-Tree for Tree Building
 
 MUSCLE for alingment
 1) Download it at: https://2018-03-06-ibioic.readthedocs.io/en/latest/install_muscle.html
-2) Update line 14 in BioPySeqAlign (or line 25 in PhyloPipelineGUI.py) with the path of the MUSCLE executable
+2) Update line 14 in BioPySeqAlign (or line 24 in PhyloPipelineGUI.py) with the path of the MUSCLE executable
 
 TrimAI for alignment
 1) Download the command line version it at: http://trimal.cgenomics.org/getting_started_with_trimal_v1.2
-2) Update line 16 in BioPySeqAlign (or line 26 in PhyloPipelineGUI.py)  with the path of the TrimAI executable
+2) Update line 16 in BioPySeqAlign (or line 25 in PhyloPipelineGUI.py)  with the path of the TrimAI executable
 
 ### GUI DESCRIPTION
 
 This will load a window where you can toggle between the three (3) options:
 1) Compile as Folder with ONLY FASTA files in it
 2) Search NCBI for a GENE AND ORGANISM and RETURN MAX RECORDS for compilation
-3) *Load an already generated alignment for tree generation*
-*NOT IMPLEMENTED YET
+3) Load an already generated sequence file or multiple sequence alignment (MSA) for tree generation
 
 ### FILE DESCRIPTIONS
 
@@ -62,6 +61,5 @@ The following files will be present:
 
 ### UPCOMING UPDATES
 
-Load an already generated alignment for tree generation
-
-Accept Wildcards into NCBI Search Parameters
+CSV FILE OUTPUT (Harte S.)
+LOCATION EXTRACTION AND TRACKING (Harte S.)
