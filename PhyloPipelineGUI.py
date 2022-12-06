@@ -76,7 +76,7 @@ def run_search_pipeline():
     
     now = datetime.now() # datetime object containing current date and time
     dt_string = now.strftime("%Y%m%d_%H%M")
-    save_path = f'{search_gene.replace("*","(wildcard)")}_{search_organism.replace("*","(wildcard)")}_{return_count}_{dt_string}'
+    save_path = f'{search_gene.replace("*","(WC)")}_{search_organism.replace("*","(WC)")}_{return_count}_{dt_string}'
     
     if ' ' in search_gene:
         search_gene = f'"{search_gene}"'
