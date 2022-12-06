@@ -61,14 +61,15 @@ def run_folder_pipeline():
 def run_search_pipeline():
     global save_path
     global search_email
-    global search_gene
+    global search_gene_abrv
     global search_organism
     global return_count
     
     display_update('Processing...\nLarger Data Sets take longer')
     
     search_email = email_entry.get()
-    search_gene = gene_entry.get()
+    search_gene_name = gene_name_entry.get()
+    search_gene_abrv = gene_abrv_entry.get()
     search_organism = organism_entry.get()
     return_count = return_count_entry.get()
     search_minbp = 100
@@ -76,17 +77,10 @@ def run_search_pipeline():
     
     now = datetime.now() # datetime object containing current date and time
     dt_string = now.strftime("%Y%m%d_%H%M")
-    save_path = f'{search_gene.replace("*","(WC)").replace(" ","_")}_{search_organism.replace("*","(WC)").replace(" ","_")}_{return_count}_{dt_string}'
-    
-    if ' ' in search_gene:
-        search_gene = f'"{search_gene}"'
-        gene_field_switch = 'All Fields'
-    else:
-        gene_field_switch = 'Gene Name'
-    if ' ' in search_organism:
-        search_gene = f'"{search_organism}"'
+    save_path = f'{search_gene_name.replace("*","(WC)").replace(" ","_")}_{search_gene_abrv.replace("*","(WC)").replace(" ","_")}_{search_organism.replace("*","(WC)").replace(" ","_")}_{return_count}_{dt_string}'
+
     search_term = f"""
-{search_gene}[{gene_field_switch}] AND {search_organism}[Organism] AND ({search_minbp}[SLEN] : {search_maxbp}[SLEN]) NOT "whole genome shotgun"[All Fields]
+(({search_gene_abrv}[Gene Name] OR "{search_gene_name}"[All Fields])) AND ("{search_organism}"[Organism] OR ("{search_organism}"[Organism] OR {search_organism}[All Fields])) AND ({search_minbp}[SLEN] : {search_maxbp}[SLEN]) NOT "whole genome shotgun"[All Fields]
 """
     search_db = 'nucleotide'
     
@@ -94,11 +88,11 @@ def run_search_pipeline():
         search_entry_display.config(text='Please add an Email')
     elif return_count == '':
         search_entry_display.config(text='Please set the Max Return Records Count')
-    elif search_gene == '' and search_organism == '':
+    elif search_gene_abrv == '' and search_organism == '':
         search_entry_display.config(text='Please enter a Gene AND/OR an Organism')
     else:
         msg = f"""
-EMAIL: {search_email}\nGENE: {search_gene}
+EMAIL: {search_email}\nGENE: {search_gene_abrv}
 ORGNAISM: {search_organism}
 Saving up to {return_count}
 NCBI records (between {search_minbp}-{search_maxbp}bp),
@@ -367,7 +361,7 @@ if __name__ == '__main__':
     
     # Set placeholders for user variables
     search_email = StringVar() 
-    search_gene = StringVar()
+    search_gene_abrv = StringVar()
     search_organism = StringVar()
     return_count = IntVar()
     folder_path = StringVar()
@@ -428,13 +422,18 @@ if __name__ == '__main__':
                            font=font_small).pack(pady=5)
     email_entry = tk.Entry(search_frame, font=font_small)
     email_entry.pack(pady=5)    
-    gene_label = tk.Label(search_frame,
-                           text='Enter the abbreviation or name of a gene to search\nEX: PsiM, or Internal Transcribed Spacer',
+    gene_name_label = tk.Label(search_frame,
+                           text='Enter the NAME of a gene to search\nEX: norbaeocystin methyltransferase, or Internal Transcribed Spacer',
                            font=font_small).pack(pady=5)
-    gene_entry = tk.Entry(search_frame, font=font_small)
-    gene_entry.pack(pady=5)
+    gene_name_entry = tk.Entry(search_frame, font=font_small)
+    gene_name_entry.pack(pady=5)
+    gene_abrv_label = tk.Label(search_frame,
+                           text='Enter the ABBREVIATION of the gene to search\nEX: PsiM, ITS*',
+                           font=font_small).pack(pady=5)
+    gene_abrv_entry = tk.Entry(search_frame, font=font_small)
+    gene_abrv_entry.pack(pady=5)
     organism_label = tk.Label(search_frame,
-                           text='Enter the scientific name of the organisms to search\nEX: Psilocybe, or Drosophila melanogaster',
+                           text='Enter the scientific name of the organisms to search\nEX: Fungi, or Drosophila melanogaster',
                            font=font_small).pack(pady=5)
     organism_entry = tk.Entry(search_frame, font=font_small)
     organism_entry.pack(pady=5)
