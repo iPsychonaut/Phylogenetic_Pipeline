@@ -29,8 +29,8 @@ bin_path = f"{install_path}/bin"
 # Set Executable paths 
 iqtree_path  = f'{bin_path}/iqtree/bin/iqtree.exe'
 muscle_exe = f'{bin_path}/muscle.exe'
-trimAI_exe = f'{bin_path}/trimAl/bin/trimAl.exe
-figtree_exe = f'{bin_path}/figtree/FigTree.exe'
+trimAI_exe = f'{bin_path}/trimAl/bin/trimal.exe
+figtree_exe = f'{bin_path}/figtree/figtree.exe'
 
 # Set Distance Calculator to 'identity' for Neucleotide Processing
 distance_calculator = DistanceCalculator('identity')
