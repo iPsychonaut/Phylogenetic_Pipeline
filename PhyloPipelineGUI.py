@@ -18,6 +18,7 @@ import tkinter.font as font
 from PIL import ImageTk, Image
 import os
 from datetime import datetime
+import subprocess
 
 # Get the path to the user's home directory
 home_path = os.path.expanduser('~')
@@ -26,7 +27,7 @@ install_path = f"{base_path}PhyloPipeline"
 bin_path = f"{install_path}/bin"
 
 # Set Executable paths 
-iqtree_path  = f'{bin_path}/iqtree.exe'
+iqtree_path  = f'{bin_path}/iqtree-1.6.12-Windows/bin/iqtree.exe'
 muscle_exe = f'{bin_path}/muscle.exe'
 trimAI_exe = f'{bin_path}/trimal.exe'
 figtree_exe = f'{bin_path}/FigTree.exe'
@@ -150,7 +151,7 @@ def run_tree_generators(trimmed_aln_path, save_path, msg):
     # Creating Tree Files and Figures based on MUSCLE Alignment
     gen_nj_tree(trimmed_aln_path)
     gen_boostrap_consensus_tree(trimmed_aln_path, save_path, 200)
-    run_iqtree(trimmed_aln_path, save_path)
+    run_iqtree(trimmed_aln_path)
 
 # Function to take the funneled combined fastas and run then through main pipeline
 def run_main_pipeline(combined_path, msg):
@@ -268,10 +269,7 @@ def MUSCLE_alignment(input_alignment, save_path):
     
     # Build out MUSCLE Command Line
     MUSCLE_alignment_path = f"{save_path}/combined_MUSCLE.fasta"
-    muscle_command = f'{muscle_exe} -align "{input_alignment}" -output "{MUSCLE_alignment_path}"'
-    print(muscle_command)
-    os.system(muscle_command)
-    
+    subprocess.run([muscle_exe, '-align', input_alignment, '-output', MUSCLE_alignment_path])
     # Display Output Alignment
     # MUSCLE_alignment = AlignIO.read(MUSCLE_alignment_path, "fasta") 
     # print(MUSCLE_alignment)
@@ -282,9 +280,7 @@ def trimAI_alignment(input_alignment):
     
     # Build out trimAI Command Line
     output_trimAI_path = f"{input_alignment.replace('.fasta', '_trimAI.fasta')}"
-    trimAI_command = f'{trimAI_exe} -in "{input_alignment}" -out "{output_trimAI_path}" -automated1'
-    print(trimAI_command)
-    os.system(trimAI_command)
+    subprocess.run([trimAI_exe, '-in', input_alignment, '-out', output_trimAI_path, '-automated1'])
     return(output_trimAI_path)
 
 ###############################################################################
@@ -292,11 +288,12 @@ def trimAI_alignment(input_alignment):
 ###############################################################################
 
 # Function to Generate Trees from an input alignment
-def run_iqtree(input_alignment_path, save_path):
+def run_iqtree(input_alignment_path):
     
     # Generate IQ-Tree Files
-    os.system(f'{iqtree_path} -s "{input_alignment_path}" -nt AUTO')
-        
+    #os.system(f'{iqtree_path} -s "{input_alignment_path}" -nt AUTO')
+    subprocess.run([iqtree_path, '-s', input_alignment_path, '-nt', 'AUTO'])
+    
     # Generate and attach Branch Support to the Fina IQ-Tree
     output_tree_path = f'{input_alignment_path}.treefile'
     supported_tree = get_branch_support(output_tree_path, 'newick')
