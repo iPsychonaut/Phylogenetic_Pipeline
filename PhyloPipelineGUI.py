@@ -27,10 +27,10 @@ install_path = f"{base_path}PhyloPipeline"
 bin_path = f"{install_path}/bin"
 
 # Set Executable paths 
-iqtree_path  = f'{bin_path}/iqtree-1.6.12-Windows/bin/iqtree.exe'
+iqtree_path  = f'{bin_path}/iqtree/bin/iqtree.exe'
 muscle_exe = f'{bin_path}/muscle.exe'
-trimAI_exe = f'{bin_path}/trimal.exe'
-figtree_exe = f'{bin_path}/FigTree.exe'
+trimAI_exe = f'{bin_path}/trimAl/bin/trimAl.exe
+figtree_exe = f'{bin_path}/figtree/FigTree.exe'
 
 # Set Distance Calculator to 'identity' for Neucleotide Processing
 distance_calculator = DistanceCalculator('identity')
@@ -289,9 +289,8 @@ def trimAI_alignment(input_alignment):
 
 # Function to Generate Trees from an input alignment
 def run_iqtree(input_alignment_path):
-    
+    print(input_alignment_path)
     # Generate IQ-Tree Files
-    #os.system(f'{iqtree_path} -s "{input_alignment_path}" -nt AUTO')
     subprocess.run([iqtree_path, '-s', input_alignment_path, '-nt', 'AUTO'])
     
     # Generate and attach Branch Support to the Fina IQ-Tree
@@ -327,7 +326,7 @@ def gen_nj_tree(input_alignment_path):
 # Function to generate Bootstrap Trees from an input alignment
 def gen_boostrap_consensus_tree(input_alignment_path, save_path, replicate_count):
     print(f'Processing {input_alignment_path} with {replicate_count}x Replicates')
-    print('NOTE: THIS CAN TAKE A WHILE')
+    print('NOTE: BOOTSTRAPPING CAN TAKE A WHILE')
     
     # Open the alignment file as a MultipleSeqAlignment object 
     with open(input_alignment_path,'r') as aln:
