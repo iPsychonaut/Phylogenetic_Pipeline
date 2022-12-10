@@ -8,15 +8,18 @@ Generate a MUSCLE Alignment based on either a Folder with Fasta files or NCBI Se
 
 IQ-Tree for Tree Building
 1) Download the command line version it at: http://www.iqtree.org/
-2) Update line 16 in BioPyTreeGen (or line 23 in PhyloPipelineGUI.py)  with the path of the IQ-Tree executable
+2) Update line 23 in PhyloPipelineGUI.py  with the path of the IQ-Tree executable
 
-MUSCLE for alingment
+MUSCLE for Multile Sequence Alingment (MSA) Generation
 1) Download it at: https://2018-03-06-ibioic.readthedocs.io/en/latest/install_muscle.html
-2) Update line 14 in BioPySeqAlign (or line 24 in PhyloPipelineGUI.py) with the path of the MUSCLE executable
+2) Update line line 24 in PhyloPipelineGUI.py with the path of the MUSCLE executable
 
-TrimAI for alignment
+TrimAl for Trimming Alignments to the same length
 1) Download the command line version it at: http://trimal.cgenomics.org/getting_started_with_trimal_v1.2
-2) Update line 16 in BioPySeqAlign (or line 25 in PhyloPipelineGUI.py)  with the path of the TrimAI executable
+2) Update line 25 in PhyloPipelineGUI.py  with the path of the TrimAl executable
+
+FigTree for Tree Viewing
+1) Load any .tre file for viewing and deeper analysis
 
 ### GUI DESCRIPTION
 
@@ -25,20 +28,20 @@ This will load a window where you can toggle between the three (3) options:
 2) Search NCBI for a GENE AND ORGANISM and RETURN MAX RECORDS for compilation
 3) Load an already generated sequence file or multiple sequence alignment (MSA) for tree generation
 
-### FILE DESCRIPTIONS
+### FILE DESCRIPTION
 
--BioPyFolderSeqs contains the function combine_fastas(input_directory) which will combine all Fasta files in a given directory into a single fasta for alignment
+-combine_fastas(input_directory) which will combine all Fasta files in a given directory into a single fasta for alignment
 
--BioPyNCBISeqs contains the function search_ncbi(user_email, search_term, return_number, search_db, save_path) which will search NCBI for, download, and combine a desired number of Fasta files for alignment
+-search_ncbi(user_email, search_term, return_number, search_db, save_path) which will search NCBI for, download, and combine a desired number of Fasta files for alignment
 
--BioPySeqAlign contains the functions:
-MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and output a MUSCLE alignment;
-trimAI_alignment(input_alignment) to call the AI trimmer
+-MUSCLE_alignment(combined_path, save_path) which will take a Combined Fasta and output a MUSCLE alignment;
 
--BioPyTreeGen contains the functions:
-tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Neighbor Joining Tree with Branch Support;
+-trimAI_alignment(input_alignment) to call the AI trimmer
+
+-tree_from_alignment(input_alignment_path, tree_format) which will take an alignment and generate a Neighbor Joining Tree with Branch Support;
 gen_boostrap_consensus_tree(input_alignment_path, replicate_count) which will generate a consensus Bootstrap Tree based on a set number of replicates with Branch Support;
-run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator and Support the final Tree's Branches
+
+-run_iqtree(input_alignment_path, save_path) which will run the IQ-Tree generator and Support the final Tree's Branches
 
 
 ### OUTPUT FILES
