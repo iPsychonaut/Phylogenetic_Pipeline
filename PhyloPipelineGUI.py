@@ -19,10 +19,17 @@ from PIL import ImageTk, Image
 import os
 from datetime import datetime
 
+# Get the path to the user's home directory
+home_path = os.path.expanduser('~')
+base_path = home_path.split('Users')[0] 
+install_path = f"{base_path}PhyloPipeline"
+bin_path = f"{install_path}/bin"
+
 # Set Executable paths 
-iqtree_path  = r'C:/Users/theda/.spyder-py3/BioPy/bin/iqtree.exe'
-muscle_exe = r'C:/Users/theda/.spyder-py3/BioPy/muscle5.1.win64.exe'
-trimAI_exe = r'C:/Users/theda/.spyder-py3/BioPy/trimal.exe'
+iqtree_path  = f'{bin_path}/iqtree.exe'
+muscle_exe = f'{bin_path}/muscle.exe'
+trimAI_exe = f'{bin_path}/trimal.exe'
+figtree_exe = f'{bin_path}/FigTree.exe'
 
 # Set Distance Calculator to 'identity' for Neucleotide Processing
 distance_calculator = DistanceCalculator('identity')
