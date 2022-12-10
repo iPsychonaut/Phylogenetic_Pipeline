@@ -364,7 +364,7 @@ def get_branch_support(input_tree_path, input_tree_format):
 if __name__ == '__main__':
     root= tk.Tk()
     root.title('PhyloPipeline')
-    root.iconbitmap('C:/Users/theda/.spyder-py3/BioPy/bin/DNA_icon.ico')
+    root.iconbitmap(f'{bin_path}/DNA_icon.ico')
     
     # Set placeholders for user variables
     search_email = StringVar() 
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     search_frame = tk.Frame(root)
     folder_frame = tk.Frame(root)
     alignment_frame = tk.Frame(root)
-    img_logo = ImageTk.PhotoImage(Image.open('C:/Users/theda/.spyder-py3/BioPy/bin/PhyloPipelineLogo.png'))
+    img_logo = ImageTk.PhotoImage(Image.open(f'{bin_path}/PhyloPipelineLogo.png'))
     
     # Let's create the fonts that we need.
     font_large = font.Font(family = 'Avenir', size = '12', weight = 'bold')
