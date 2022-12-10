@@ -20,9 +20,9 @@ import os
 from datetime import datetime
 
 # Set Executable paths 
-iqtree_path  = 'E:/iqtree-1.6.12-Windows/iqtree-1.6.12-Windows/bin/iqtree.exe'
-muscle_exe = r"C:/Users/theda/.spyder-py3/BioPy/muscle5.1.win64.exe"
-trimAI_exe = r"C:/Users/theda/.spyder-py3/BioPy/trimal.exe"
+iqtree_path  = r'C:/Users/theda/.spyder-py3/BioPy/bin/iqtree.exe'
+muscle_exe = r'C:/Users/theda/.spyder-py3/BioPy/muscle5.1.win64.exe'
+trimAI_exe = r'C:/Users/theda/.spyder-py3/BioPy/trimal.exe'
 
 # Set Distance Calculator to 'identity' for Neucleotide Processing
 distance_calculator = DistanceCalculator('identity')
@@ -357,7 +357,7 @@ def get_branch_support(input_tree_path, input_tree_format):
 if __name__ == '__main__':
     root= tk.Tk()
     root.title('PhyloPipeline')
-    root.iconbitmap('DNA_icon.ico')
+    root.iconbitmap('C:/Users/theda/.spyder-py3/BioPy/bin/DNA_icon.ico')
     
     # Set placeholders for user variables
     search_email = StringVar() 
@@ -374,7 +374,7 @@ if __name__ == '__main__':
     search_frame = tk.Frame(root)
     folder_frame = tk.Frame(root)
     alignment_frame = tk.Frame(root)
-    img_logo = ImageTk.PhotoImage(Image.open("C:/Users/theda/.spyder-py3/BioPy/CC_banner.png"))
+    img_logo = ImageTk.PhotoImage(Image.open('C:/Users/theda/.spyder-py3/BioPy/bin/PhyloPipelineLogo.png'))
     
     # Let's create the fonts that we need.
     font_large = font.Font(family = 'Avenir', size = '12', weight = 'bold')
